@@ -2,6 +2,7 @@
 *.pyc
 *.egg-info
 .python-version
+db.sqlite3
 /.cache
 /.idea
 /build
