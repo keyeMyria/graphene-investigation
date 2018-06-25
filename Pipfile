@@ -9,6 +9,7 @@ graphene = "*"
 dynamic-rest = "*"
 graphene-django = "*"
 psycopg2-binary = "*"
+django-extensions = "*"
 
 [dev-packages]
 

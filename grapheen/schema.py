@@ -1,4 +1,3 @@
-from django.contrib.auth.models import User
 import graphene
 from graphene_django import DjangoObjectType
 
@@ -15,7 +14,8 @@ from models.models import (
     Coach,
     Game,
     TeamGameComposition,
-    RefereeGameComposition
+    RefereeGameComposition,
+    User
 )
 
 

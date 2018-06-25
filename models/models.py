@@ -1,10 +1,11 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
 
 
 class Post(models.Model):
     author = models.ForeignKey(
-        'auth.User',
+        User,
         related_name='posts',
         on_delete=models.SET_NULL,
         null=True,
@@ -13,6 +14,7 @@ class Post(models.Model):
     tags = models.ManyToManyField('Tag', related_name='posts')
     title = models.CharField(max_length=200)
     text = models.TextField()
+    post_date = models.DateTimeField(null=True, blank=True)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
 
@@ -29,14 +31,14 @@ class Comment(models.Model):
         blank=True
     )
     creator = models.ForeignKey(
-        'auth.User',
+        User,
         related_name='comments',
         on_delete=models.SET_NULL,
         null=True,
         blank=True
     )
     bodytext = models.TextField()
-    post_date = models.DateTimeField(auto_now_add=True)
+    post_date = models.DateTimeField()
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
 
@@ -71,7 +73,7 @@ class Team(models.Model):
 
 class Referee(models.Model):
     user = models.OneToOneField(
-        'auth.User',
+        User,
         related_name='referee',
         on_delete=models.SET_NULL,
         null=True,
@@ -95,6 +97,12 @@ class Group(models.Model):
     GROUP_D = 'GROUP_D'
     GROUP_E = 'GROUP_E'
     GROUP_F = 'GROUP_F'
+    GROUP_G = 'GROUP_G'
+    GROUP_H = 'GROUP_H'
+    GROUP_I = 'GROUP_I'
+    GROUP_J = 'GROUP_J'
+    GROUP_K = 'GROUP_K'
+    GROUP_L = 'GROUP_L'
     GROUP_NAMES = (
         (GROUP_A, 'Group A'),
         (GROUP_B, 'Group B'),
@@ -102,13 +110,19 @@ class Group(models.Model):
         (GROUP_D, 'Group D'),
         (GROUP_E, 'Group E'),
         (GROUP_F, 'Group F'),
+        (GROUP_G, 'Group G'),
+        (GROUP_H, 'Group H'),
+        (GROUP_I, 'Group I'),
+        (GROUP_J, 'Group J'),
+        (GROUP_K, 'Group K'),
+        (GROUP_L, 'Group L'),
     )
     name = models.CharField(choices=GROUP_NAMES, max_length=7)
 
 
 class Athlete(models.Model):
     user = models.OneToOneField(
-        'auth.User',
+        User,
         related_name='athlete',
         on_delete=models.SET_NULL,
         null=True,
@@ -136,7 +150,7 @@ class Coach(models.Model):
     )
 
     user = models.OneToOneField(
-        'auth.User',
+        User,
         related_name='coach',
         on_delete=models.SET_NULL,
         null=True,
