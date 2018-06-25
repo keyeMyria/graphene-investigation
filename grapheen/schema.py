@@ -1,5 +1,5 @@
+from django.contrib.auth.models import User
 import graphene
-
 from graphene_django import DjangoObjectType
 
 # Register your models here.
@@ -79,6 +79,11 @@ class RefereeGameCompositionType(DjangoObjectType):
         model = RefereeGameComposition
 
 
+class UserType(DjangoObjectType):
+    class Meta:
+        model = User
+
+
 class Query(graphene.ObjectType):
     all_posts = graphene.List(PostType)
     all_comments = graphene.List(CommentType)
@@ -92,6 +97,29 @@ class Query(graphene.ObjectType):
     all_games = graphene.List(GameType)
     all_team_game_compositions = graphene.List(TeamGameCompositionType)
     all_referee_game_compositions = graphene.List(RefereeGameCompositionType)
+    all_users = graphene.List(UserType)
+
+    post = graphene.Field(
+        PostType,
+        id=graphene.Int(),
+        name=graphene.String()
+    )
+    comment = graphene.Field(
+        CommentType,
+        id=graphene.Int(),
+        bodytext=graphene.String()
+    )
+    tag = graphene.Field(TagType)
+    team = graphene.Field(TeamType)
+    referee = graphene.Field(RefereeType)
+    countrie = graphene.Field(CountryType)
+    group = graphene.Field(GroupType)
+    athlete = graphene.Field(AthleteType)
+    coache = graphene.Field(CoachType)
+    game = graphene.Field(GameType)
+    team_game_composition = graphene.Field(TeamGameCompositionType)
+    referee_game_composition = graphene.Field(RefereeGameCompositionType)
+    user = graphene.Field(UserType)
 
     def resolve_all_posts(self, info, **kwargs):
         return Post.objects.all()
@@ -128,3 +156,30 @@ class Query(graphene.ObjectType):
 
     def resolve_all_referee_game_compositions(self, info, **kwargs):
         return RefereeGameComposition.objects.all()
+
+    def resolve_all_users(self, info, **kwargs):
+        return User.objects.all()
+
+    def resolve_post(self, info, **kwargs):
+        id = kwargs.get('id')
+        title = kwargs.get('title')
+
+        if id is not None:
+            return Post.objects.get(pk=id)
+
+        if title is not None:
+            return Post.objects.get(title=title)
+
+        return None
+
+    def resolve_comment(self, info, **kwargs):
+        id = kwargs.get('id')
+        bodytext = kwargs.get('bodytext')
+
+        if id is not None:
+            return Comment.objects.get(pk=id)
+
+        if bodytext is not None:
+            return Comment.objects.get(bodytext=bodytext)
+
+        return None
