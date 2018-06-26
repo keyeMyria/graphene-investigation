@@ -183,3 +183,40 @@ class Query(graphene.ObjectType):
             return Comment.objects.get(bodytext=bodytext)
 
         return None
+
+# 1) Defines a mutation class. Right after, you define the output of the mutation, the data
+# the server can send back to the client. The output is defined field by field for
+# learning purposes. On the next mutation you’ll define them as just one.
+class CreatePost(graphene.Mutation):
+    id = graphene.Int()
+    author = graphene.Field(User)
+    tags = graphene.List(Tag)
+    title = graphene.String()
+    text = graphene.String()
+    post_date = graphene.types.datetime.DateTime()
+    updated = graphene.types.datetime.DateTime()
+    created = graphene.types.datetime.DateTime()
+
+    #2 Defines the data you can send to the server, in this case, it's
+    # the author_id, title, and text.
+    class Arguments:
+        author_id = graphene.Int()
+        title = graphene.String()
+        text = graphene.String()
+
+    #3 The mutation method: it creates a post on the database using the data sent by the user,
+    # through the author_id, title, and text parameters. After, the server returns the CreatePost
+    # class with the data just created. See how this matches the parameters set on #1.
+    def mutate(self, info, author_id, title, text):
+        user = User.objects.get(id=author_id)
+        post = Post.objects.create(user=user, title=title, text=text)
+
+        return CreatePost(
+            id=link.id,
+            url=link.url,
+            description=link.description,
+        )
+
+#4 Creates a mutation class with a field to be resolved, which points to our mutation defined before.
+class Mutation(graphene.ObjectType):
+    create_post = CreatePost.Field()
