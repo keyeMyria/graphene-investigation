@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'dynamic_rest',
     'models',
     'grapheen',
-    'drest'
+    'drest',
+    'django_extensions'
 ]
 
 MIDDLEWARE = [
