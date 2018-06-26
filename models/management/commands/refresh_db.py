@@ -34,10 +34,10 @@ class Command(BaseCommand):
 
         self.stdout.write(self.style.SUCCESS('Creating data'))
 
-        # create 48 countries
+        # create 64 countries
         self.stdout.write(self.style.SUCCESS('Creating countries'))
         countries = []
-        for num in range(48):
+        for num in range(64):
             digits = "".join( [choice(string.digits) for i in range(100)] )
             chars = "".join( [choice(string.ascii_letters) for i in range(150)] )
 
@@ -49,15 +49,15 @@ class Command(BaseCommand):
             )
             countries.append(country)
 
-        # create 12 groups
+        # create 16 groups
         self.stdout.write(self.style.SUCCESS('Creating groups'))
         groups = []
-        for letter in 'ABCDEFGHJIKL':
+        for letter in 'ABCDEFGHJIKLMNOP':
             group = Group.objects.create(name='GROUP_{0}'.format(letter))
             groups.append(group)
 
 
-        # create 48 teams. 4 teams in each group
+        # create 62 teams. 4 teams in each group
         self.stdout.write(self.style.SUCCESS('Creating teams'))
         teams = []
         for index, country in enumerate(countries):
@@ -69,19 +69,19 @@ class Command(BaseCommand):
             )
             teams.append(team)
 
-        # create 72 games (each team plays all the other teams in their group)
-        # that's 6 games per group * 12 groups
+        # create 108 games (each team plays all the other teams in their group)
+        # that's 6 games per group * 16 groups
         self.stdout.write(self.style.SUCCESS('Creating games'))
         games = []
         locs = ['Big Stadium', 'Small Stadium', 'Rowdy Stadium', 'Quiet Stadium']
-        for num in range(72):
+        for num in range(108):
             game = Game.objects.create(
                 start_time=randomDate("2018-06-14 07:00", "2018-07-21 21:00", random()),
                 location=locs[num % 4]
             )
             games.append(game)
 
-        # associate each team with a game. 72 games so 144 team_game_compositions
+        # associate each team with a game. 108 games so 216 team_game_compositions
         self.stdout.write(self.style.SUCCESS('Creating team-game-compositions'))
         game_counter = 0
         for index, group in enumerate(groups):
@@ -107,10 +107,10 @@ class Command(BaseCommand):
                 game_counter += 1
 
         # create users.
-        # (11 athletes + 1 coach per team) * 48 teams + 10 referess == 586 users
+        # (11 athletes + 1 coach per team) * 64 teams + 20 referess == 788 users
         self.stdout.write(self.style.SUCCESS('Creating users'))
         users = []
-        NUM_USERS = 586
+        NUM_USERS = 788
         for num in range(NUM_USERS):
             user = User.objects.create_user('user_{0}'.format(num + 1))
             users.append(user)
@@ -139,10 +139,10 @@ class Command(BaseCommand):
                 favorite_strategy=Coach.FAVORITE_STRATEGY_CHOICES[random_strat_index][0]
             )
 
-        # create 10 referees
+        # create 20 referees
         self.stdout.write(self.style.SUCCESS('Creating referees'))
         referees = []
-        for num in range(10):
+        for num in range(20):
             user_index += 1
             referee = Referee.objects.create(
                 user=users[user_index]
@@ -169,10 +169,10 @@ class Command(BaseCommand):
             tag = Tag.objects.create(name=name)
             tags.append(tag)
 
-        # create 75 blog posts
+        # create 175 blog posts
         self.stdout.write(self.style.SUCCESS('Creating posts'))
         posts = []
-        for index in range(75):
+        for index in range(175):
             tags_to_choose = sample(tags, 3)
             post = Post.objects.create(
                 author=users[randint(0, NUM_USERS - 1)],
