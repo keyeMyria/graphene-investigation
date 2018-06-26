@@ -189,8 +189,8 @@ class Query(graphene.ObjectType):
 # learning purposes. On the next mutation you’ll define them as just one.
 class CreatePost(graphene.Mutation):
     id = graphene.Int()
-    author = graphene.Field(User)
-    tags = graphene.List(Tag)
+    author = graphene.Field(UserType)
+    tags = graphene.List(TagType)
     title = graphene.String()
     text = graphene.String()
     post_date = graphene.types.datetime.DateTime()
@@ -209,12 +209,17 @@ class CreatePost(graphene.Mutation):
     # class with the data just created. See how this matches the parameters set on #1.
     def mutate(self, info, author_id, title, text):
         user = User.objects.get(id=author_id)
-        post = Post.objects.create(user=user, title=title, text=text)
+        post = Post.objects.create(author=user, title=title, text=text)
 
         return CreatePost(
-            id=link.id,
-            url=link.url,
-            description=link.description,
+            id=post.id,
+            author=post.author,
+            tags=post.tags.all(),
+            title=post.title,
+            text=post.text,
+            post_date=post.post_date,
+            updated=post.updated,
+            created=post.created
         )
 
 #4 Creates a mutation class with a field to be resolved, which points to our mutation defined before.

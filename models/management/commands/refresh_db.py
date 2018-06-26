@@ -57,7 +57,7 @@ class Command(BaseCommand):
             groups.append(group)
 
 
-        # create 62 teams. 4 teams in each group
+        # create 64 teams. 4 teams in each group
         self.stdout.write(self.style.SUCCESS('Creating teams'))
         teams = []
         for index, country in enumerate(countries):
@@ -85,21 +85,21 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS('Creating team-game-compositions'))
         game_counter = 0
         for index, group in enumerate(groups):
+
             # for each group, create all the comps
             # 6 games in a group. so creat 2 TeamGameCompositions 6 times
-
             game_mapping = [[0, 1], [2, 3], [0, 2], [1, 3], [0, 3], [1, 2]]
-            teams = group.teams.all() # 4 teams
+            teams_in_group = group.teams.all() # 4 teams
             for game_num in range(6):
                 game_map = game_mapping[game_num]
                 TeamGameComposition.objects.create(
-                    team=teams[game_map[0]],
+                    team=teams_in_group[game_map[0]],
                     game=games[game_counter],
                     is_home=True,
                     result=TeamGameComposition.WIN
                 )
                 TeamGameComposition.objects.create(
-                    team=teams[game_map[1]],
+                    team=teams_in_group[game_map[1]],
                     game=games[game_counter],
                     is_home=False,
                     result=TeamGameComposition.LOSE
@@ -116,11 +116,11 @@ class Command(BaseCommand):
             users.append(user)
 
         # create athletes. 11 athletes per team
-        self.stdout.write(self.style.SUCCESS('Creating athlets'))
+        self.stdout.write(self.style.SUCCESS('Creating athletes'))
         user_index = 0
         for team_index, team in enumerate(teams):
             for num in range(11):
-                user_index = team_index * 12 + num
+                user_index = team_index * 11 + num
                 Athlete.objects.create(
                     user=users[user_index],
                     team=team,

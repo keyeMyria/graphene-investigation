@@ -9,7 +9,7 @@ class Query(grapheen.schema.Query, graphene.ObjectType):
     pass
 
 
-class Mutation(graphene.schema.Mutation, graphene.ObjectType):
+class Mutation(grapheen.schema.Mutation, graphene.ObjectType):
     pass
 
 
