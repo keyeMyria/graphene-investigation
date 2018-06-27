@@ -394,7 +394,7 @@ With relay enabled, it's overall less code on the backend. However, the request 
 
 Finally, here is dynamic-rest's query. Note that this is just a normal rest API. So the previous two requests were POST requests with the graphql query embedded in the body of the request. For Dynamic-Rest, it's a normal GET request with query-params:
 ```
-/api/athletes?include[]=user.posts.tags&include[]=user.posts.comments.creator.&include[]=team.coaches.user.posts.tags.&include[]=team.coaches.user.posts.comments.creator.&include[]=team.country&include[]=team.team_game_compositions.game.referee_game_compositions.referee.user.posts.tags.&include[]=team.team_game_compositions.game.referee_game_compositions.referee.user.posts.comments.creator.&per_page=30&page=1
+/api/athletes?include[]=user.posts.tags&include[]=user.posts.comments.creator.&include[]=team.coaches.user.posts.tags.&include[]=team.coaches.user.posts.comments.creator.&include[]=team.country.&include[]=team.team_game_compositions.game.referee_game_compositions.referee.user.posts.tags.&include[]=team.team_game_compositions.game.referee_game_compositions.referee.user.posts.comments.creator.&per_page=30&page=1
 ```
 here is a more readable version:
 ```
@@ -403,13 +403,15 @@ here is a more readable version:
 &include[]=user.posts.comments.creator.
 &include[]=team.coaches.user.posts.tags.
 &include[]=team.coaches.user.posts.comments.creator.
-&include[]=team.country
+&include[]=team.country.
 &include[]=team.team_game_compositions.game.referee_game_compositions.referee.user.posts.tags.
 &include[]=team.team_game_compositions.game.referee_game_compositions.referee.user.posts.comments.creator.
 &per_page=30&page=1
 ```
 
-Using `django-debug-toolbar`, graphene's response took 956 ms, and 1371 sql queries. Using relay was actually even worse: response time of 1120 ms and did 1606  sql queries. Holy crap that's bad! Dynamic-rest blew these numbers out of the water: 31 ms response time and only 23 queries.
+Using `django-debug-toolbar`, graphene's response took 956 ms, and 1371 sql queries. Using relay was actually even worse: response time of 1120 ms and did 1606  sql queries. Holy crap that's bad! Dynamic-rest blew these numbers out of the water: 31 ms response time and only 24 queries.
+
+The structure of the responses differ greatly between graphql and dynamic-rest, which probably helps explain the start different response times and number of queries. There is a lot of repeat info in graphql. See [graphene-response.json](https://github.com/cooperjbrandon/graphene-investigation/blob/master/example-responses/graphene-response.json "graphene-response.json"), [graphene-relay-response.json](https://github.com/cooperjbrandon/graphene-investigation/blob/master/example-responses/graphene-relay-response.json "graphene-relay-response.json"), and [dynamic-rest-response.json](https://github.com/cooperjbrandon/graphene-investigation/blob/master/example-responses/dynamic-rest-response.json "dynamic-rest-response.json"). I'll investigate example why Graphene is way slower in a separate blog post.
 
 ### Final Thoughts
 At first glance, Dynamic-Rest is way faster, more efficient, and provides more functionality out of the box. However, this does not mean it's any better (or worse) than graphql. Although they seem similar tools, the use cases differ. GraphQL integrates super easily with apollo-client. If you are expecting your data as a graph from the backend, graphQL might be the choice for you. However, if you are using a front end ORM tool like ember-data, Dyanmic-Rest is a pretty great choice. More on this in a later post!
