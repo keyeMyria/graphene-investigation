@@ -53,7 +53,7 @@ class Tag(models.Model):
 
 
 class Team(models.Model):
-    counry = models.OneToOneField(
+    country = models.OneToOneField(
         'Country',
         related_name='team',
         on_delete=models.SET_NULL,
@@ -68,7 +68,7 @@ class Team(models.Model):
         blank=True
     )
     ranking = models.PositiveSmallIntegerField()
-    games = models.ManyToManyField('Game', through='TeamGameComposition')
+    games = models.ManyToManyField('Game', through='TeamGameComposition', related_name='teams')
 
 
 class Referee(models.Model):
@@ -80,7 +80,7 @@ class Referee(models.Model):
         blank=True
     )
     poor_eyesight = models.BooleanField(default=True)
-    games = models.ManyToManyField('Game', through='RefereeGameComposition')
+    games = models.ManyToManyField('Game', through='RefereeGameComposition', related_name='referees')
 
 
 class Country(models.Model):

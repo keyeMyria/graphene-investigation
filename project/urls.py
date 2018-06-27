@@ -13,13 +13,34 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from inspect import isclass
+
 from django.contrib import admin
-from django.conf.urls import url
+from django.conf import settings
+from django.conf.urls import include, url
 from django.views.decorators.csrf import csrf_exempt
 
+import debug_toolbar
+from dynamic_rest.routers import DynamicRouter
 from graphene_django.views import GraphQLView
 
+from drest import views
+
+# auto-register views
+router = DynamicRouter()
+
+for name in dir(views):
+    view = getattr(views, name)
+    if isclass(view) and getattr(view, 'serializer_class', None):
+        router.register_resource(view, namespace='api')
+
 urlpatterns = [
+    url(r'^', include(router.urls)),
     url(r'^admin/', admin.site.urls),
     url(r'^graphql', csrf_exempt(GraphQLView.as_view(graphiql=True))),
 ]
+
+if settings.DEBUG:
+    urlpatterns = [
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    ] + urlpatterns

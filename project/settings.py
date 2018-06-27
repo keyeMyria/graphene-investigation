@@ -43,7 +43,9 @@ INSTALLED_APPS = [
     'models',
     'grapheen',
     'drest',
-    'django_extensions'
+    'django_extensions',
+    'debug_toolbar',
+    'graphiql_debug_toolbar',
 ]
 
 MIDDLEWARE = [
@@ -54,6 +56,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'graphiql_debug_toolbar.middleware.DebugToolbarMiddleware',
+
 ]
 
 ROOT_URLCONF = 'project.urls'
@@ -133,3 +138,6 @@ STATIC_URL = '/static/'
 GRAPHENE = {
     'SCHEMA': 'project.schema.schema' # Where your Graphene schema lives
 }
+
+# django debug toolbar. uncomment when you want to view the debug-toolbar in the api
+INTERNAL_IPS = ['127.0.0.1']
