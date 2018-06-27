@@ -1,5 +1,6 @@
 import graphene
 from graphene_django import DjangoObjectType
+from django.db.models import Q
 
 # Register your models here.
 from models.models import (
@@ -92,7 +93,12 @@ class Query(graphene.ObjectType):
     all_referees = graphene.List(RefereeType)
     all_countries = graphene.List(CountryType)
     all_groups = graphene.List(GroupType)
-    all_athletes = graphene.List(AthleteType)
+    all_athletes = graphene.List(
+        AthleteType,
+        team_id=graphene.Int(),
+        first=graphene.Int(),
+        skip=graphene.Int(),
+    )
     all_coaches = graphene.List(CoachType)
     all_games = graphene.List(GameType)
     all_team_game_compositions = graphene.List(TeamGameCompositionType)
@@ -112,10 +118,10 @@ class Query(graphene.ObjectType):
     tag = graphene.Field(TagType)
     team = graphene.Field(TeamType)
     referee = graphene.Field(RefereeType)
-    countrie = graphene.Field(CountryType)
+    country = graphene.Field(CountryType)
     group = graphene.Field(GroupType)
     athlete = graphene.Field(AthleteType)
-    coache = graphene.Field(CoachType)
+    coach = graphene.Field(CoachType)
     game = graphene.Field(GameType)
     team_game_composition = graphene.Field(TeamGameCompositionType)
     referee_game_composition = graphene.Field(RefereeGameCompositionType)
@@ -142,8 +148,23 @@ class Query(graphene.ObjectType):
     def resolve_all_groups(self, info, **kwargs):
         return Group.objects.all()
 
-    def resolve_all_athletes(self, info, **kwargs):
-        return Athlete.objects.all()
+    def resolve_all_athletes(self, info, team_id=None, first=None, skip=None, **kwargs):
+        # The value sent with the teamId, first, or skip parameter will be on the args variable
+        qs = Athlete.objects.all()
+
+        if team_id:
+            filter = (
+                Q(team__id=team_id)
+            )
+            qs = qs.filter(filter)
+
+        if skip:
+            qs = qs[skip::]
+
+        if first:
+            qs = qs[:first]
+
+        return qs
 
     def resolve_all_coaches(self, info, **kwargs):
         return Coach.objects.all()
