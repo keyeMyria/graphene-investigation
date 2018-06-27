@@ -63,7 +63,7 @@ class TeamFilter(django_filters.FilterSet):
     class Meta:
         model = Team
         fields = [
-            'counry',
+            'country',
             'group',
             'ranking',
             'games',
@@ -236,35 +236,35 @@ class UserNode(DjangoObjectType):
 
 class RelayQuery(graphene.ObjectType):
     #4  Uses the PostNode with the relay_post field inside the your new query.
-    relay_post = graphene.relay.Node.Field(PostNode)
-    relay_comment = graphene.relay.Node.Field(CommentNode)
-    relay_tag = graphene.relay.Node.Field(TagNode)
-    relay_team = graphene.relay.Node.Field(TeamNode)
-    relay_referee = graphene.relay.Node.Field(RefereeNode)
-    relay_country = graphene.relay.Node.Field(CountryNode)
-    relay_group = graphene.relay.Node.Field(GroupNode)
-    relay_athlete = graphene.relay.Node.Field(AthleteNode)
-    relay_coach = graphene.relay.Node.Field(CoachNode)
-    relay_game = graphene.relay.Node.Field(GameNode)
-    relay_team_game_composition = graphene.relay.Node.Field(TeamGameCompositionNode)
-    relay_referee_game_composition = graphene.relay.Node.Field(RefereeGameCompositionNode)
-    relay_user = graphene.relay.Node.Field(UserNode)
+    post = graphene.relay.Node.Field(PostNode)
+    comment = graphene.relay.Node.Field(CommentNode)
+    tag = graphene.relay.Node.Field(TagNode)
+    team = graphene.relay.Node.Field(TeamNode)
+    referee = graphene.relay.Node.Field(RefereeNode)
+    country = graphene.relay.Node.Field(CountryNode)
+    group = graphene.relay.Node.Field(GroupNode)
+    athlete = graphene.relay.Node.Field(AthleteNode)
+    coach = graphene.relay.Node.Field(CoachNode)
+    game = graphene.relay.Node.Field(GameNode)
+    team_game_composition = graphene.relay.Node.Field(TeamGameCompositionNode)
+    referee_game_composition = graphene.relay.Node.Field(RefereeGameCompositionNode)
+    user = graphene.relay.Node.Field(UserNode)
 
     #5 Defines the relay_posts field as a Connection, which
     # implements the pagination structure.
-    relay_posts = DjangoFilterConnectionField(PostNode, filterset_class=PostFilter)
-    relay_comments = DjangoFilterConnectionField(CommentNode, filterset_class=CommentFilter)
-    relay_tags = DjangoFilterConnectionField(TagNode, filterset_class=TagFilter)
-    relay_teams = DjangoFilterConnectionField(TeamNode, filterset_class=TeamFilter)
-    relay_referees = DjangoFilterConnectionField(RefereeNode, filterset_class=RefereeFilter)
-    relay_countries = DjangoFilterConnectionField(CountryNode, filterset_class=CountryFilter)
-    relay_groups = DjangoFilterConnectionField(GroupNode, filterset_class=GroupFilter)
-    relay_athletes = DjangoFilterConnectionField(AthleteNode, filterset_class=AthleteFilter)
-    relay_coaches = DjangoFilterConnectionField(CoachNode, filterset_class=CoachFilter)
-    relay_games = DjangoFilterConnectionField(GameNode, filterset_class=GameFilter)
-    relay_team_game_compositions = DjangoFilterConnectionField(TeamGameCompositionNode, filterset_class=TeamGameCompositionFilter)
-    relay_referee_game_compositions = DjangoFilterConnectionField(RefereeGameCompositionNode, filterset_class=RefereeGameCompositionFilter)
-    relay_users = DjangoFilterConnectionField(UserNode, filterset_class=UserFilter)
+    all_posts = DjangoFilterConnectionField(PostNode, filterset_class=PostFilter)
+    all_comments = DjangoFilterConnectionField(CommentNode, filterset_class=CommentFilter)
+    all_tags = DjangoFilterConnectionField(TagNode, filterset_class=TagFilter)
+    all_teams = DjangoFilterConnectionField(TeamNode, filterset_class=TeamFilter)
+    all_referees = DjangoFilterConnectionField(RefereeNode, filterset_class=RefereeFilter)
+    all_countries = DjangoFilterConnectionField(CountryNode, filterset_class=CountryFilter)
+    all_groups = DjangoFilterConnectionField(GroupNode, filterset_class=GroupFilter)
+    all_athletes = DjangoFilterConnectionField(AthleteNode, filterset_class=AthleteFilter)
+    all_coaches = DjangoFilterConnectionField(CoachNode, filterset_class=CoachFilter)
+    all_games = DjangoFilterConnectionField(GameNode, filterset_class=GameFilter)
+    all_team_game_compositions = DjangoFilterConnectionField(TeamGameCompositionNode, filterset_class=TeamGameCompositionFilter)
+    all_referee_game_compositions = DjangoFilterConnectionField(RefereeGameCompositionNode, filterset_class=RefereeGameCompositionFilter)
+    all_users = DjangoFilterConnectionField(UserNode, filterset_class=UserFilter)
 
 
 class RelayCreatePost(graphene.relay.ClientIDMutation):
@@ -287,4 +287,4 @@ class RelayCreatePost(graphene.relay.ClientIDMutation):
 
 
 class RelayMutation(graphene.AbstractType):
-    relay_create_post = RelayCreatePost.Field()
+    create_post = RelayCreatePost.Field()
